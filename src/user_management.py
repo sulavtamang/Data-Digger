@@ -62,15 +62,7 @@ class UserManager:
             ''', (user.username, user.password))
 
             row = cursor.fetchone()
-            if row:
-                print(f'Login Successful')
-                return True
-            print(f'Invalid username or password!')
-            return False
-            # if row:
-            #     print(f"user authenticated")
-            #     return
-            # print('no such user in the database')
 
-            # return self.user_exists(user)
-    
+            return bool(row)
+            
+            
