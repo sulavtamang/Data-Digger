@@ -1,66 +1,17 @@
 from db_operations import DatabaseManager
-from user_management import User, UserManager
+from user_management import User, UserManager, Login
 from data_scraper import Scraper
+from display_manager import DisplayManager 
+from menu_manager import MenuManager
 
 usermanager = UserManager('database/users.db')
 
-def display_welcome_message():
-    print("############################################")
-    print("     🎶 Welcome to AudioShop Scraper! 🎶")
-    print("############################################")
-    print("\nHello, and thank you for choosing our application!\n")
-    print("This tool allows you to:")
-    print("✨ Search for musical instruments and audio gear.")
-    print("✨ Save and manage your search results in a database.")
-    print("✨ Perform user account operations like registration and login.\n")
-    print("🔑 Please register or log in to access all features.")
-    print("🎯 Let's get started!")
-    print("\n############################################\n")
-
-def display_menu():
-    print("\n========================================")
-    print("                 Main Menu               ")
-    print("========================================")
-    print("1️⃣ Register a new user")
-    print("2️⃣ Log in")
-    print("3️⃣ Exit")
-    print("========================================")
-
-def login():
-    print("\n========================================")
-    print("                 Login                   ")
-    print("========================================")
-    print("\nPlease log in to access your account.")
-    attempts = 3
-
-    while attempts > 0:
-        username = input("🔑 Username: ").strip()
-        password = input("🔒 Password: ").strip()
-
-        login_user = User(username, password)
-
-        if not username or not password:
-            print("\n❌ Both fields are required. Try again.")
-            continue
-
-        if usermanager.user_exists(login_user):
-            print(f"\n🏩 Welcome, {username}! You are now logged in.")
-            return True, login_user
-
-        else:
-            attempts -= 1
-            print(f"\n❌ Invalid credentials. {attempts} attempt(s) remaining.")
-
-    print("\n⛔ Too many failed attempts. Returning to the main menu.")
-    return False
-
 def main():
-    display_welcome_message()
+    DisplayManager.display_welcome_message()
 
     while True:
-        display_menu()
-
-        choice = input(f'\n🕹️ Please enter your choice from the menu: ')
+        MenuManager.display_main_menu()
+        choice = MenuManager.dynamic_user_choice(MenuManager.menu_option_count['main_menu'])
 
         if choice == '1':
             name = input(f'\n🔑 Enter your name: ').strip()
@@ -70,26 +21,18 @@ def main():
 
             usermanager.create_user_table()
             usermanager.register_user(user_register)
-            print("\n✅ Registration successful! Please log in.")
+
+            DisplayManager.display_registration_successfull_message()
 
         elif choice == '2':
-            logged_in, logged_in_user = login()
+            logged_in, logged_in_user = Login.login()
 
             if logged_in:
                 login_status = True
 
                 while login_status:
-                    print("\n========================================")
-                    print("             Scraping Menu               ")
-                    print("========================================")
-                    print("1️⃣ Perform a new scrape")
-                    print("2️⃣ View scraped data")
-                    print("3️⃣ Account")
-                    print("4️⃣ Log Out")
-                    print("5️⃣ Exit")
-                    print("========================================")
-
-                    choice = input("\n🕹️ Enter your choice (1-4): ").strip()
+                    MenuManager.display_login_menu()
+                    choice = MenuManager.dynamic_user_choice(MenuManager.menu_option_count['login_menu'])
 
                     if choice == '1':
                         print("\n=== 🎯 Data Scraping Interface ===")
@@ -110,7 +53,7 @@ def main():
 
                         print(f'\nDo you want to store the data in the database?\n1️⃣ Yes\n2️⃣ No')
 
-                        store_in_db = input(f'\n🕹️ Enter your choice: ')
+                        store_in_db = MenuManager.dynamic_user_choice(MenuManager.menu_option_count['yes_no_menu'])
 
                         if store_in_db == '1':
                             db_manager = DatabaseManager('database/extracted_items.db')
@@ -121,14 +64,8 @@ def main():
                             print("\n⚠️ Returning to previous menu.")
 
                     elif choice == '3':
-                        print(f'\nWelcome to Account Centre.')
-
-                        print('1. Update username and password')
-                        print('2. Remove your account')
-                        print('3. Return Back')
-
-
-                        account_op_choice = input(f'\n🕹️ Enter your choice (1-3): ').strip()
+                        MenuManager.display_account_centre_menu()
+                        account_op_choice = MenuManager.dynamic_user_choice(MenuManager.menu_option_count['account_menu'])
 
                         if account_op_choice == '1':
                             print(f'\nChange your username and password')
@@ -137,22 +74,43 @@ def main():
                             new_pword = input(f'Enter new password: ')
 
                             if not new_username or not new_pword:
-                                print(f'Username or password field cannot be empty.')
+                                print(f'\nUsername or password field cannot be empty.')
                             
                             usermanager.update_user(new_username, new_pword, logged_in_user)
-                            print(f'successfully updated')
+                            print(f'\nSuccessfully updated')
+                        
+                        elif account_op_choice == '2':
+                            print(f'\nAre you sure you want to delete your account?\n')
 
+                            print(f'1. Yes')
+                            print(f'2. No')
+
+                            delete_user_choice = input(f'\nEnter your choice: ').strip()
+
+                            while True:
+                                if delete_user_choice == '2':
+                                    break
+
+                                elif delete_user_choice == '1':
+                                    usermanager.remove_user(logged_in_user)
+                                    print(f'\nUser {logged_in_user.username} successfully deleted!')
+                                    break
+                            break
+                        
+                        elif account_op_choice == '3':
+                            break
+                        break
 
                     elif choice == '4':
                         login_status = False
                         print("\n🔓 Logging out. Returning to the main menu.")
 
                     elif choice == '5':
-                        print("\n🚪 Exiting the program. Goodbye!")
+                        DisplayManager.display_exit_message()
                         return
 
         elif choice == '3':
-            print("\n🚪 Exiting the program. Goodbye!")
+            DisplayManager.display_exit_message()
             return
 
 if __name__ == "__main__":
