@@ -1,9 +1,8 @@
 from db_operations import DatabaseManager
-from user import User, UserManager
+from user_management import User, UserManager
 from data_scraper import Scraper
-from bs4 import BeautifulSoup
-import requests
-import sqlite3
+
+usermanager = UserManager('database/users.db')
 
 def display_welcome_message():
     print("############################################")
@@ -39,15 +38,14 @@ def login():
         password = input("🔒 Password: ").strip()
 
         login_user = User(username, password)
-        usermanager_login = UserManager('database/users.db')
 
         if not username or not password:
             print("\n❌ Both fields are required. Try again.")
             continue
 
-        if usermanager_login.authenticate_user(login_user):
+        if usermanager.user_exists(login_user):
             print(f"\n🏩 Welcome, {username}! You are now logged in.")
-            return True
+            return True, login_user
 
         else:
             attempts -= 1
@@ -65,17 +63,19 @@ def main():
         choice = input(f'\n🕹️ Please enter your choice from the menu: ')
 
         if choice == '1':
-            name = input(f'\n🔑 Enter your name: ')
-            password = input(f'🔒 Set password: ')
+            name = input(f'\n🔑 Enter your name: ').strip()
+            password = input(f'🔒 Set password: ').strip()
 
             user_register = User(name, password)
-            usermanager_register = UserManager('database/users.db')
-            usermanager_register.create_user_table()
-            usermanager_register.register_user(user_register)
+
+            usermanager.create_user_table()
+            usermanager.register_user(user_register)
             print("\n✅ Registration successful! Please log in.")
 
         elif choice == '2':
-            if login():
+            logged_in, logged_in_user = login()
+
+            if logged_in:
                 login_status = True
 
                 while login_status:
@@ -84,8 +84,9 @@ def main():
                     print("========================================")
                     print("1️⃣ Perform a new scrape")
                     print("2️⃣ View scraped data")
-                    print("3️⃣ Log out")
-                    print("4️⃣ Exit program")
+                    print("3️⃣ Account")
+                    print("4️⃣ Log Out")
+                    print("5️⃣ Exit")
                     print("========================================")
 
                     choice = input("\n🕹️ Enter your choice (1-4): ").strip()
@@ -120,10 +121,33 @@ def main():
                             print("\n⚠️ Returning to previous menu.")
 
                     elif choice == '3':
+                        print(f'\nWelcome to Account Centre.')
+
+                        print('1. Update username and password')
+                        print('2. Remove your account')
+                        print('3. Return Back')
+
+
+                        account_op_choice = input(f'\n🕹️ Enter your choice (1-3): ').strip()
+
+                        if account_op_choice == '1':
+                            print(f'\nChange your username and password')
+
+                            new_username = input(f'\nEnter new username: ')
+                            new_pword = input(f'Enter new password: ')
+
+                            if not new_username or not new_pword:
+                                print(f'Username or password field cannot be empty.')
+                            
+                            usermanager.update_user(new_username, new_pword, logged_in_user)
+                            print(f'successfully updated')
+
+
+                    elif choice == '4':
                         login_status = False
                         print("\n🔓 Logging out. Returning to the main menu.")
 
-                    elif choice == '4':
+                    elif choice == '5':
                         print("\n🚪 Exiting the program. Goodbye!")
                         return
 

@@ -1,4 +1,4 @@
-# from db_operations import DatabaseManager
+
 import sqlite3
 
 class User:
@@ -6,11 +6,15 @@ class User:
         self.username = username
         self.password = password
 
+    def __str__(self):
+        print (f'{self.username}')
+
 
 class UserManager:
     def __init__(self, db_path):
         self.db_path = db_path
     
+
     def create_user_table(self):
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
@@ -29,10 +33,10 @@ class UserManager:
             cursor = conn.cursor()
 
             cursor.execute(f'''
-            SELECT 1 FROM users WHERE user_name = (?) AND password = (?)
+            SELECT 1 FROM users WHERE user_name = (?) AND password = (?) LIMIT 1;
             ''', (user.username, user.password))
 
-            return cursor.fetchone() is not None
+            return bool(cursor.fetchone())
         
         
     def register_user(self, user):
@@ -52,17 +56,12 @@ class UserManager:
 
             print(f"\nUser {user.username} successfully registered.")
 
-
-    def authenticate_user(self, user):
+    def update_user(self, new_username, new_password, user):
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
 
             cursor.execute('''
-            SELECT 1 FROM users WHERE user_name = (?) AND password = (?)
-            ''', (user.username, user.password))
-
-            row = cursor.fetchone()
-
-            return bool(row)
-            
-            
+            UPDATE users
+            SET user_name = (?), password = (?)
+            WHERE user_name = (?) AND password = (?)
+            ''', (new_username, new_password, user.username, user.password))

@@ -1,7 +1,6 @@
 
 import requests
 from bs4 import BeautifulSoup
-from db_operations import DatabaseManager
 
 class Scraper:
     def __init__(self, search_key):

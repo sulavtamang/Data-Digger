@@ -61,6 +61,5 @@ class DatabaseManager:
         self.conn.commit()
         self.conn.close()
 
-    #for user data operations
     
 
