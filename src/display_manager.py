@@ -1,6 +1,7 @@
 
 class DisplayManager:
     @staticmethod
+
     def display_welcome_message():
         print("############################################")
         print("     🎶 Welcome to AudioShop Scraper! 🎶")
@@ -29,3 +30,8 @@ class DisplayManager:
     @staticmethod
     def display_exit_message():
         print("\n🚪 Exiting the program. Goodbye!")
+
+    
+    @staticmethod
+    def display_invalid_choice_message():
+        print('\nInvalid choice!')
