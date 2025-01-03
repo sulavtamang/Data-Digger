@@ -13,10 +13,10 @@
 
 
 # 3. Technologies Used
-- **Programming Language:** Python
+- **Programming Language:** *Python*
 
 - **Libraries:**
-    - requests and BeautifulSoup for web scraping
-    - sqlite3 for database management
+    - *requests* and *BeautifulSoup* for web scraping
+    - *sqlite3* for database management
 
-- **Other Tools:** Git for version control
+- **Other Tools:** *Git* for version control
