@@ -2,7 +2,6 @@
 import sqlite3
 
 class DatabaseManager:
-    # db_path = 
 
     def __init__(self, db_path):
         self.db_path = db_path

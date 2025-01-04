@@ -1,6 +1,4 @@
-from db_operations import DatabaseManager
-from user_management import User, UserManager, Login
-from data_scraper import Scraper
+
 from display_manager import DisplayManager 
 from menu_manager import MenuManager
 from action_manager import *

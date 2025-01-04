@@ -1,8 +1,3 @@
-# from user_management import UserManager, Login
-# from display_manager import DisplayManager
-# from data_scraper import Scraper
-# # import sys
-
 
 class MenuManager:
     @staticmethod
