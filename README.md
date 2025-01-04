@@ -103,6 +103,6 @@ Music-Gear-Digger-audioshopnepal/
 - **🛡️ Implement API integration for secure and scalable data scraping.**
 
 
-# 8. Licence
-This project is licensed under the [MIT]() License. See the LICENSE file for details.
+# 8. License
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/sulavtamang/Music-Gear-Digger-audioshopnepal/blob/main/LICNESE) file for details.
 
