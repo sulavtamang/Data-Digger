@@ -38,9 +38,9 @@ It features user authentication, data management in a database, and a user-frien
 
     2. Create and activate virtual environment:
     ```
-    python -m venv venv
-    source venv/bin/activate  # Linux/Mac
-    venv\Scripts\activate     # Windows
+    python -m venv env
+    source env/bin/activate  # Linux/Mac
+    env\Scripts\activate     # Windows
 
     ```
 
@@ -82,8 +82,8 @@ It features user authentication, data management in a database, and a user-frien
 ```plaintext
 Music-Gear-Digger-audioshopnepal/
 ├── database
-│   ├── users.db                # Database for user management
-│   ├── extracted_items.db      # Database for storing scraped data
+│   ├── users.db               # Database for user management
+│   ├── extracted_items.db     # Database for storing scraped data
 ├── src
 │   ├── db_operations.py       # Handles database operations for scraped data
 │   ├── action_manager.py      # Contains utility functions for handling core actions
@@ -91,7 +91,9 @@ Music-Gear-Digger-audioshopnepal/
 │   ├── display_manager.py     # Manages display messages and user prompts
 │   ├── menu_manager.py        # Manages menu displays and user choices
 │   ├── data_scraper.py        # Scraper module for extracting data from web pages
-│   ├── main.py                # Entry point of the application
+│   ├── main.py 
+├── .gitignore                 # to specify files and directories to ignore in Gi
+├── LICENSE                    # for the project's license details
 ├── README.md                  # Project documentation (this file)
 ├── requirements.txt           # Required Python packages
 ```
